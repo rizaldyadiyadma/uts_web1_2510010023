@@ -1,0 +1,509 @@
+@charset "UTF-8";
+
+/* 1. Variabel Warna (4 Warna: #FF4A17, #273D4E, #F1F4FA, #FFFFFF) & Reset */
+:root {
+    color-scheme: light dark;
+    --accent: #FF4A17;
+    --dark: #273D4E;
+    --bg: #FFFFFF;
+    --bg-alt: #F1F4FA;
+    --surface: #FFFFFF;
+    --text: rgba(39, 61, 78, 0.92);
+    --muted: rgba(39, 61, 78, 0.72);
+    --border: rgba(39, 61, 78, 0.16);
+    --shadow: 0 4px 16px rgba(39, 61, 78, 0.10);
+    --shadow-hover: 0 12px 28px rgba(39, 61, 78, 0.18);
+    --nav-h: 4rem;
+    --font-head: 'Raleway', system-ui, sans-serif;
+    --font-body: 'Roboto', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-h) + 1rem);
+}
+
+body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    padding-top: var(--nav-h); /* Kompensasi navbar fixed */
+    overflow-x: clip; /* Cegah scroll horizontal tanpa memutus position:sticky */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+/* 2. Layout, Tipografi & Tombol */
+h1, h2, h3 {
+    font-family: var(--font-head);
+    color: var(--dark);
+    line-height: 1.25;
+}
+
+.container {
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding-inline: 1rem;
+}
+
+.section { padding: 3rem 0; }
+.section-alt { background: var(--bg-alt); }
+
+.section-heading {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.btn {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 0.7rem 1.4rem;
+    border: 2px solid transparent;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 74, 23, 0.28);
+}
+
+.btn-primary { background: var(--accent); color: #FFFFFF; }
+.btn-secondary { background: transparent; color: var(--dark); border-color: var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.btn-block { display: block; width: 100%; }
+
+/* 3. Navbar Fixed & Hamburger CSS-Only (Trik Checkbox) */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-h);
+    background: var(--dark);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.brand {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+.brand span { color: var(--accent); }
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.hamburger span {
+    display: block;
+    height: 2px;
+    background: #FFFFFF;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.menu-toggle:focus-visible + .hamburger { outline: 2px solid var(--accent); outline-offset: 2px; }
+.menu-toggle:checked + .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle:checked + .hamburger span:nth-child(2) { opacity: 0; }
+.menu-toggle:checked + .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.nav-menu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    padding: 0.75rem 1rem 1rem;
+    background: var(--dark);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.menu-toggle:checked ~ .nav-menu { display: flex; }
+
+.nav-menu a {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    color: #F1F4FA;
+    font-weight: 500;
+    border-radius: 0.3rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-menu a:hover, .nav-menu a.active {
+    background: var(--accent);
+    color: #FFFFFF;
+}
+
+/* 4. Hero & Page Banner (Flexbox Centered) */
+.hero, .page-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    padding: 3rem 0;
+    background:
+        linear-gradient(rgba(39, 61, 78, 0.78), rgba(19, 32, 42, 0.85)),
+        url("../img/hero-bg.jpg") center / cover no-repeat;
+}
+
+.hero { min-height: 70vh; }
+.page-banner { min-height: 13rem; }
+
+.hero h1 { font-size: 1.75rem; color: #FFFFFF; margin-bottom: 0.85rem; }
+.page-banner h1 { font-size: 1.65rem; color: #FFFFFF; margin-bottom: 0.5rem; }
+
+.hero p, .page-banner p {
+    max-width: 40rem;
+    margin: 0 auto 1.5rem;
+    color: #F1F4FA;
+}
+
+.page-banner p { margin-bottom: 0; }
+
+/* 5. Subheader Sticky & Grid Kartu Produk */
+.sticky-sub {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0.35rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.sticky-sub h2 { font-size: 1.15rem; }
+.sticky-sub span, .sticky-sub a { font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+
+.card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.card, .testimonial {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover, .testimonial:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.card figure { position: relative; overflow: hidden; }
+
+.card img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.card:hover img { transform: scale(1.06); }
+
+.card figcaption {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.65rem;
+    background: var(--dark);
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.25rem;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.25rem;
+}
+
+.card-body h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.card-body p { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
+
+.card-list {
+    padding-left: 1.15rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin: auto 0 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+.price { font-family: var(--font-head); font-weight: 700; color: var(--accent); white-space: nowrap; }
+.price del { color: var(--muted); font-size: 0.82rem; font-weight: 400; margin-right: 0.3rem; }
+.card-meta time { font-size: 0.8rem; color: var(--muted); }
+
+/* 6. Testimoni, Form Kontak, Tabel & Peta */
+.testimonial {
+    padding: 1.35rem;
+    border-top: 3px solid var(--accent);
+}
+
+.testimonial blockquote { font-style: italic; flex: 1; margin-bottom: 1rem; }
+
+.testimonial-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+.testimonial-meta cite { font-style: normal; font-weight: 700; color: var(--dark); }
+
+.contact-form {
+    max-width: 42rem;
+    margin: 0 auto;
+    background: var(--surface);
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+}
+
+.contact-form fieldset {
+    border: 1px solid var(--border);
+    border-radius: 0.35rem;
+    padding: 1.15rem;
+}
+
+.contact-form legend {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--dark);
+    padding: 0 0.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.form-group label { font-weight: 700; font-size: 0.9rem; color: var(--dark); }
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 0.3rem;
+}
+
+.form-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.table-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+}
+
+.service-table {
+    width: 100%;
+    min-width: 32rem;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+}
+
+.service-table caption {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--dark);
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.service-table thead th {
+    background: var(--dark);
+    color: #FFFFFF;
+    border-bottom: 3px solid var(--accent);
+}
+
+.service-table th, .service-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.service-table tbody tr:nth-child(even) { background: var(--bg-alt); }
+.service-table tbody th { background: var(--surface); border-right: 1px solid var(--border); }
+.service-table tfoot td { background: var(--bg-alt); border-bottom: none; }
+
+.map-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    box-shadow: var(--shadow);
+}
+
+.map-box iframe {
+    display: block;
+    width: 100%;
+    height: 20rem;
+    border: 0;
+    border-radius: 0.35rem;
+}
+
+.map-box figcaption {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--muted);
+}
+
+/* 7. Footer */
+.site-footer {
+    background: var(--dark);
+    color: #F1F4FA;
+    text-align: center;
+    padding: 1.75rem 0;
+    font-size: 0.88rem;
+}
+
+.site-footer p + p { margin-top: 0.4rem; }
+.site-footer a { color: #FFFFFF; text-decoration: underline; }
+.site-footer a:hover { color: var(--accent); }
+
+/* 8. Responsif (Mobile-First: Tablet >= 768px, Desktop >= 1024px) */
+@media (min-width: 768px) {
+    .container { padding-inline: 1.5rem; }
+    .hamburger { display: none; }
+
+    .nav-menu {
+        display: flex;
+        position: static;
+        width: auto;
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0;
+        background: transparent;
+        border: none;
+    }
+
+    .hero h1 { font-size: 2.75rem; }
+    .page-banner h1 { font-size: 2.25rem; }
+    .card-grid { grid-template-columns: repeat(2, 1fr); }
+    .map-box iframe { height: 24rem; }
+}
+
+@media (min-width: 1024px) {
+    .card-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 9. Dark Mode (prefers-color-scheme) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #13202A;
+        --bg-alt: #1B2C39;
+        --surface: #223544;
+        --text: #F1F4FA;
+        --muted: #B8C7D4;
+        --border: rgba(241, 244, 250, 0.16);
+        --shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.5);
+    }
+
+    h1, h2, h3,
+    .btn-secondary,
+    .testimonial-meta cite,
+    .contact-form legend,
+    .form-group label,
+    .service-table caption { color: #FFFFFF; }
+}
